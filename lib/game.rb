@@ -1,10 +1,12 @@
 require_relative 'dictionary'
+require_relative 'player'
 
 class Game
-  attr_accessor :dictionary, :chosen_letter, :word
+  attr_accessor :dictionary, :player, :chosen_letter, :word
 
   def initialize
     self.dictionary = Dictionary.new
+    self.player = Player.new
     self.word = ""
 
     create_blanks
@@ -16,6 +18,12 @@ class Game
     puts word
     prompt_player
     check_choice
+    if win?
+      puts word
+      puts "Congrats! You've won"
+    else
+      play_game
+    end
   end
 
   def greet_user
@@ -38,7 +46,7 @@ class Game
   end
 
   def check_choice
-    secret_word = dictionary.secret_word
+    secret_word = dictionary.secret_word.split("").join(" ")
     if secret_word.include?(chosen_letter)
       occurence = secret_word.count(chosen_letter)
       if occurence == 1
@@ -49,14 +57,16 @@ class Game
         }
       end
     end
-    play_game
   end
 
   def substitute_blank(secret_word)
-        secret_word = secret_word.split("").join(" ")
         letter_index = secret_word.index(chosen_letter)
         self.word[letter_index] = chosen_letter
         secret_word[letter_index] = "_"
+  end
+
+  def win?
+    !word.include?("_")
   end
 
   
