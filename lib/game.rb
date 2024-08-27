@@ -28,9 +28,7 @@ class Game
     else
       player.chances.zero? ? lost : play_game
     end
-    if continue_game?
-      Game.new
-    end
+    continue_game
   end
 
   def greet_user
@@ -88,10 +86,10 @@ class Game
     puts "You've lost"
   end
 
-  def continue_game?
+  def continue_game
     puts "Do you want to continue?[Y/N]"
     response = gets.chomp
-    response.upcase == "Y" ? true : false
+    response.upcase == "Y" ? Game.new : exit
   end
 
   def add_letter(letter)
