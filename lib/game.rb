@@ -1,5 +1,6 @@
 require_relative 'dictionary'
 require_relative 'player'
+require 'json'
 
 class Game
   attr_accessor :dictionary, :player, :chosen_letter, :word, :letters_selected
@@ -52,11 +53,16 @@ class Game
   def prompt_player
     puts "\nEnter a letter: "
     self.chosen_letter = gets.chomp
+    if chosen_letter == "save"
+      save_to_json
+    end
   end
 
   def check_choice
     secret_word = dictionary.secret_word.split("").join(" ")
-    if secret_word.include?(chosen_letter)
+    if chosen_letter == "save"
+      puts "Saved successfully!"
+    elsif secret_word.include?(chosen_letter)
       occurence = secret_word.count(chosen_letter)
       if occurence == 1
         substitute_blank(secret_word)
@@ -98,6 +104,20 @@ class Game
 
   def clear_screen
     puts "\e[1;1H\e[2J"
+  end
+
+  def save_to_json
+    data = {
+      score: player.display_score,
+      chances: player.chances,
+      word: self.word,
+      secret_word: dictionary.secret_word,
+      letters_selected: self.letters_selected
+    }
+    json_data = JSON.generate(data)
+    File.open("myFile.json", "w") do |file|
+    file.write(json_data)
+    end
   end
 
   
