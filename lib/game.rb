@@ -42,18 +42,21 @@ class Game
     if secret_word.include?(chosen_letter)
       occurence = secret_word.count(chosen_letter)
       if occurence == 1
-        letter_index = secret_word.index(chosen_letter)
-        self.word[letter_index] = chosen_letter
-        secret_word[letter_index] = "_"
+        substitute_blank(secret_word)
       else
         occurence.times{
-          letter_index = secret_word.index(chosen_letter)
-          self.word[letter_index] = chosen_letter
-          secret_word[letter_index] = "_"
+          substitute_blank(secret_word)
         }
       end
     end
     play_game
+  end
+
+  def substitute_blank(secret_word)
+        secret_word = secret_word.split("").join(" ")
+        letter_index = secret_word.index(chosen_letter)
+        self.word[letter_index] = chosen_letter
+        secret_word[letter_index] = "_"
   end
 
   
