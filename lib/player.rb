@@ -1,6 +1,8 @@
+# This class keeps track of player score and chances
 class Player
   attr_accessor :chances
-  @@score = 0
+
+  @@score = 0 # rubocop:disable Style/ClassVars
 
   def initialize
     self.chances = 13
@@ -10,12 +12,11 @@ class Player
     @@score
   end
 
-  def set_score(score)
-    @@score = score
+  def assign_score(score)
+    @@score = score # rubocop:disable Style/ClassVars
   end
 
   def increment_score
-    @@score += 1
+    @@score += 1 # rubocop:disable Style/ClassVars
   end
-
 end

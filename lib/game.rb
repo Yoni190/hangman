@@ -1,7 +1,8 @@
-require_relative 'dictionary'
-require_relative 'player'
-require 'json'
+require_relative "dictionary"
+require_relative "player"
+require "json"
 
+# This class unites all classes
 class Game
   attr_accessor :dictionary, :player, :chosen_letter, :word, :letters_selected
 
@@ -12,25 +13,19 @@ class Game
     self.letters_selected = []
 
     greet_user
-    
+
     create_blanks
-    if new_or_load == "2"
-      read_from_json
-    end
+    read_from_json if new_or_load == "2"
     play_game
   end
 
   def play_game
-    
-    display_score_and_chances
-    puts word
+    display_info
     prompt_player
     check_choice
     clear_screen
-    if win?
-      puts word
-      puts "Congrats! You've won"
-      player.increment_score
+    if !word.include?("_") # rubocop:disable Style/NegatedIfElseCondition
+      win_message
     else
       player.chances.zero? ? lost : play_game
     end
@@ -45,51 +40,52 @@ class Game
           ---------------------------------------------------------------\n\n"
   end
 
-  def display_score_and_chances
-    puts "Score: #{player.display_score}   \t\t\t Chances left: #{player.chances} \n Selected: #{letters_selected.join(", ")}"
+  def display_info
+    puts "Score: #{player.display_score}   \t\t\t Chances left: #{player.chances} \n
+    Selected: #{letters_selected.join(', ')}\n #{word}"
   end
 
   def create_blanks
-    dictionary.length_of_word.times{
-      self.word += "_ "
-    }
+    dictionary.length_of_word.times { self.word += "_ " }
   end
 
   def prompt_player
     puts "\nEnter a letter: "
     self.chosen_letter = gets.chomp
-    if chosen_letter == "save"
-      save_to_json
-    end
+    return unless chosen_letter == "save"
+
+    save_to_json
+  end
+
+  def win_message
+    puts word
+    puts "Congrats! You've won"
+    player.increment_score
   end
 
   def check_choice
-    secret_word = dictionary.secret_word.split("").join(" ")
-    if chosen_letter == "save"
-      puts "Saved successfully!"
+    secret_word = dictionary.secret_word.chars.join(" ")
+    if chosen_letter == "save" then puts "Saved successfully!"
     elsif secret_word.include?(chosen_letter)
       occurence = secret_word.count(chosen_letter)
-      if occurence == 1
-        substitute_blank(secret_word)
-      else
-        occurence.times{
-          substitute_blank(secret_word)
-        }
-      end
+      substitute_all_letters(occurence, secret_word)
     else
       player.chances -= 1
       add_letter(chosen_letter)
     end
   end
 
-  def substitute_blank(secret_word)
-        letter_index = secret_word.index(chosen_letter)
-        self.word[letter_index] = chosen_letter
-        secret_word[letter_index] = "_"
+  def substitute_all_letters(occurence, secret_word)
+    if occurence == 1 then substitute_blank(secret_word)
+    else
+      occurence.times { substitute_blank(secret_word) }
+    end
   end
 
-  def win?
-    !word.include?("_")
+  def substitute_blank(secret_word)
+    letter_index = secret_word.index(chosen_letter)
+    self.word[letter_index] = chosen_letter
+    secret_word[letter_index] = "_"
   end
 
   def lost
@@ -117,29 +113,23 @@ class Game
       chances: player.chances,
       word: self.word,
       secret_word: dictionary.secret_word,
-      letters_selected: self.letters_selected
+      letters_selected: letters_selected
     }
     json_data = JSON.generate(data)
-    File.open("myFile.json", "w") do |file|
-    file.write(json_data)
-    end
+    File.write("myFile.json", json_data)
   end
 
   def read_from_json
-    begin
-      json_data = File.open("myFile.json")
-      data = JSON.load(json_data)
-      
-      player.set_score(data["score"])
-      player.chances = data["chances"]
-      self.word = data["word"]
-      dictionary.secret_word = data["secret_word"]
-      self.letters_selected = data["letters_selected"]
-    rescue
-      puts "\nGame does not exist!"
-      Game.new
-    end
-  
+    data = JSON.load(File.open("myFile.json")) # rubocop:disable Security/JSONLoad
+
+    player.assign_score(data["score"])
+    player.chances = data["chances"]
+    self.word = data["word"]
+    dictionary.secret_word = data["secret_word"]
+    self.letters_selected = data["letters_selected"]
+  rescue StandardError
+    puts "Game file not found"
+    Game.new
   end
 
   def new_or_load
@@ -147,7 +137,4 @@ class Game
     2. Load an existing game"
     gets.chomp
   end
-
-  
-
 end
