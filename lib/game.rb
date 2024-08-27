@@ -1,13 +1,18 @@
 require_relative 'dictionary'
 
 class Game
-  attr_accessor :dictionary, :chosen_letter
+  attr_accessor :dictionary, :chosen_letter, :word
 
   def initialize
     self.dictionary = Dictionary.new
+    self.word = ""
+    play_game
+  end
+
+  def play_game
     greet_user
+    display_blanks
     prompt_player
-    create_blanks
   end
 
   def greet_user
@@ -18,16 +23,15 @@ class Game
           ---------------------------------------------------------------\n\n"
   end
 
-  def create_blanks
+  def display_blanks
     dictionary.length_of_word.times{
-      print "_ "
+      self.word += "_ "
     }
-    print "\n"
-    
+    puts word
   end
 
   def prompt_player
-    puts "Enter a letter: "
+    puts "\nEnter a letter: "
     self.chosen_letter = gets.chomp
   end
 
