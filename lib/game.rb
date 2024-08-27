@@ -20,6 +20,7 @@ class Game
     puts word
     prompt_player
     check_choice
+    clear_screen
     if win?
       puts word
       puts "Congrats! You've won"
@@ -92,6 +93,10 @@ class Game
 
   def add_letter(letter)
     letters_selected.include?(letter) ? letters_selected : letters_selected.push(letter)
+  end
+
+  def clear_screen
+    puts "\e[1;1H\e[2J"
   end
 
   
