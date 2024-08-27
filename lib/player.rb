@@ -3,6 +3,6 @@ class Player
 
   def initialize
     self.score = 0
-    self.chances = 8
+    self.chances = 13
   end
 end

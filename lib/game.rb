@@ -15,15 +15,19 @@ class Game
 
   def play_game
     greet_user
+    display_score_and_chances
     puts word
     prompt_player
     check_choice
     if win?
       puts word
       puts "Congrats! You've won"
+      player.score += 1
     else
-      play_game
+      player.chances -= 1
+      player.chances.zero? ? lost : play_game
     end
+    
   end
 
   def greet_user
@@ -32,6 +36,10 @@ class Game
           | \t\s\sA game where you either find the correct word \t|\n
           | \t\t\tor be hanged! Have fun \s\s\t\t|\n
           ---------------------------------------------------------------\n\n"
+  end
+
+  def display_score_and_chances
+    puts "Score: #{player.score}   \t\t\t Chances left: #{player.chances}"
   end
 
   def create_blanks
@@ -67,6 +75,10 @@ class Game
 
   def win?
     !word.include?("_")
+  end
+
+  def lost
+    puts "You've lost"
   end
 
   
