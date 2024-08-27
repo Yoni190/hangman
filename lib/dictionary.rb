@@ -15,4 +15,8 @@ class Dictionary
     valid_words = words.filter{|word| word.length.between?(5,12)}
     valid_words
   end
+
+  def length_of_word
+    secret_word.length
+  end
 end

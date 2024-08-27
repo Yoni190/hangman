@@ -1,9 +1,10 @@
 require_relative 'dictionary'
 
 class Game
+  attr_accessor :dictionary
 
   def initialize
-    dictionary = Dictionary.new
+    self.dictionary = Dictionary.new
     greet_user
   end
 
@@ -14,5 +15,7 @@ class Game
           | \t\t\tor be hanged! Have fun \s\s\t\t|\n
           ---------------------------------------------------------------\n\n"
   end
+
+  
 
 end
