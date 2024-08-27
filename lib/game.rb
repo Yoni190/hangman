@@ -28,7 +28,9 @@ class Game
     else
       player.chances.zero? ? lost : play_game
     end
-    continue
+    if continue_game?
+      Game.new
+    end
   end
 
   def greet_user
@@ -40,7 +42,7 @@ class Game
   end
 
   def display_score_and_chances
-    puts "Score: #{player.display_score}   \t\t\t Chances left: #{player.chances}"
+    puts "Score: #{player.display_score}   \t\t\t Chances left: #{player.chances} \n Selected: #{letters_selected.join(", ")}"
   end
 
   def create_blanks
@@ -67,6 +69,7 @@ class Game
       end
     else
       player.chances -= 1
+      add_letter(chosen_letter)
     end
   end
 
@@ -85,11 +88,10 @@ class Game
     puts "You've lost"
   end
 
-  def continue
+  def continue_game?
     puts "Do you want to continue?[Y/N]"
-    if gets.chomp == "Y"
-      Game.new
-    end
+    response = gets.chomp
+    response.upcase == "Y" ? true : false
   end
 
   def add_letter(letter)
