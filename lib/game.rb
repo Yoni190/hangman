@@ -22,12 +22,12 @@ class Game
     if win?
       puts word
       puts "Congrats! You've won"
-      player.score += 1
+      player.increment_score
     else
       player.chances -= 1
       player.chances.zero? ? lost : play_game
     end
-    
+    continue
   end
 
   def greet_user
@@ -39,7 +39,7 @@ class Game
   end
 
   def display_score_and_chances
-    puts "Score: #{player.score}   \t\t\t Chances left: #{player.chances}"
+    puts "Score: #{player.display_score}   \t\t\t Chances left: #{player.chances}"
   end
 
   def create_blanks
@@ -78,10 +78,16 @@ class Game
   end
 
   def lost
+    puts "The word was #{dictionary.secret_word}"
     puts "You've lost"
   end
 
-  
+  def continue
+    puts "Do you want to continue?[Y/N]"
+    if gets.chomp == "Y"
+      Game.new
+    end
+  end
 
   
 

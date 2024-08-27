@@ -1,8 +1,16 @@
 class Player
-  attr_accessor :score, :chances
+  attr_accessor :chances
+  @@score = 0
 
   def initialize
-    self.score = 0
     self.chances = 13
+  end
+
+  def display_score
+    @@score
+  end
+
+  def increment_score
+    @@score += 1
   end
 end
