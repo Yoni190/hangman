@@ -126,14 +126,20 @@ class Game
   end
 
   def read_from_json
-    json_data = File.open("myFile.json")
-    data = JSON.load(json_data)
-    
-    player.set_score(data["score"])
-    player.chances = data["chances"]
-    self.word = data["word"]
-    dictionary.secret_word = data["secret_word"]
-    self.letters_selected = data["letters_selected"]
+    begin
+      json_data = File.open("myFile.json")
+      data = JSON.load(json_data)
+      
+      player.set_score(data["score"])
+      player.chances = data["chances"]
+      self.word = data["word"]
+      dictionary.secret_word = data["secret_word"]
+      self.letters_selected = data["letters_selected"]
+    rescue
+      puts "\nGame does not exist!"
+      Game.new
+    end
+  
   end
 
   def new_or_load
