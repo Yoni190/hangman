@@ -1,3 +1,3 @@
-require_relative 'lib/dictionary'
+require_relative 'lib/game'
 
-Dictionary.new
+Game.new
