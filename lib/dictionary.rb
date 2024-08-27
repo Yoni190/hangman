@@ -4,6 +4,7 @@ class Dictionary
   def initialize
     self.words = load_dictionary.split(" ")
     self.secret_word = choose_secret_word.sample
+    puts secret_word
   end
 
   def load_dictionary
