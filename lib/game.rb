@@ -26,7 +26,6 @@ class Game
       puts "Congrats! You've won"
       player.increment_score
     else
-      player.chances -= 1
       player.chances.zero? ? lost : play_game
     end
     continue
@@ -66,6 +65,8 @@ class Game
           substitute_blank(secret_word)
         }
       end
+    else
+      player.chances -= 1
     end
   end
 
