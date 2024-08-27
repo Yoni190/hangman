@@ -7,6 +7,7 @@ class Game
     self.dictionary = Dictionary.new
     greet_user
     prompt_player
+    create_blanks
   end
 
   def greet_user
@@ -17,7 +18,13 @@ class Game
           ---------------------------------------------------------------\n\n"
   end
 
-
+  def create_blanks
+    dictionary.length_of_word.times{
+      print "_ "
+    }
+    print "\n"
+    
+  end
 
   def prompt_player
     puts "Enter a letter: "
