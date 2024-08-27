@@ -11,12 +11,17 @@ class Game
     self.word = ""
     self.letters_selected = []
 
+    greet_user
+    
     create_blanks
+    if new_or_load == "2"
+      read_from_json
+    end
     play_game
   end
 
   def play_game
-    greet_user
+    
     display_score_and_chances
     puts word
     prompt_player
@@ -118,6 +123,23 @@ class Game
     File.open("myFile.json", "w") do |file|
     file.write(json_data)
     end
+  end
+
+  def read_from_json
+    json_data = File.open("myFile.json")
+    data = JSON.load(json_data)
+    
+    player.set_score(data["score"])
+    player.chances = data["chances"]
+    self.word = data["word"]
+    dictionary.secret_word = data["secret_word"]
+    self.letters_selected = data["letters_selected"]
+  end
+
+  def new_or_load
+    puts "1. Play a new game\n
+    2. Load an existing game"
+    gets.chomp
   end
 
   

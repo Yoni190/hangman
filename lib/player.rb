@@ -10,7 +10,12 @@ class Player
     @@score
   end
 
+  def set_score(score)
+    @@score = score
+  end
+
   def increment_score
     @@score += 1
   end
+
 end
