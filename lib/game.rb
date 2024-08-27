@@ -2,12 +2,13 @@ require_relative 'dictionary'
 require_relative 'player'
 
 class Game
-  attr_accessor :dictionary, :player, :chosen_letter, :word
+  attr_accessor :dictionary, :player, :chosen_letter, :word, :letters_selected
 
   def initialize
     self.dictionary = Dictionary.new
     self.player = Player.new
     self.word = ""
+    self.letters_selected = []
 
     create_blanks
     play_game
@@ -87,6 +88,10 @@ class Game
     if gets.chomp == "Y"
       Game.new
     end
+  end
+
+  def add_letter(letter)
+    letters_selected.include?(letter) ? letters_selected : letters_selected.push(letter)
   end
 
   
